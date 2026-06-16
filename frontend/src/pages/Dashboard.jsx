@@ -4,59 +4,12 @@ import api from "../api/axios";
 
 import Navbar from "../components/Navbar";
 import PollCard from "../components/PollCard";
-import socket from "../api/socket";
-
-useEffect(() => {
-
-  socket.on(
-    "poll:create",
-    () => {
-      fetchPolls();
-    }
-  );
-
-  socket.on(
-    "poll:vote",
-    () => {
-      fetchPolls();
-    }
-  );
-
-  socket.on(
-    "poll:close",
-    () => {
-      fetchPolls();
-    }
-  );
-
-  return () => {
-
-    socket.off(
-      "poll:create"
-    );
-
-    socket.off(
-      "poll:vote"
-    );
-
-    socket.off(
-      "poll:close"
-    );
-
-  };
-
-}, []);
+import socket from "../socket";
 
 function Dashboard() {
 
   const [polls, setPolls] =
     useState([]);
-
-  useEffect(() => {
-
-    fetchPolls();
-
-  }, []);
 
   const fetchPolls =
     async () => {
@@ -74,6 +27,53 @@ function Dashboard() {
 
       }
     };
+
+  useEffect(() => {
+
+    fetchPolls();
+
+  }, []);
+
+  useEffect(() => {
+
+    socket.on(
+      "poll:create",
+      () => {
+        fetchPolls();
+      }
+    );
+
+    socket.on(
+      "poll:vote",
+      () => {
+        fetchPolls();
+      }
+    );
+
+    socket.on(
+      "poll:close",
+      () => {
+        fetchPolls();
+      }
+    );
+
+    return () => {
+
+      socket.off(
+        "poll:create"
+      );
+
+      socket.off(
+        "poll:vote"
+      );
+
+      socket.off(
+        "poll:close"
+      );
+
+    };
+
+  }, []);
 
   return (
     <>
